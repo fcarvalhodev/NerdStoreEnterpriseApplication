@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -32,6 +33,8 @@ namespace NSE.Identity.API.Controllers
             _appSettings = appSettings.Value;
         }
 
+        #region .: REGISTER :.        
+
         [HttpPost("new-user")]
         public async Task<ActionResult> Register(UserRegister userRegister)
         {
@@ -55,6 +58,10 @@ namespace NSE.Identity.API.Controllers
             return CustomReponse();
         }
 
+        #endregion
+
+        #region .: LOGIN :.
+
         [HttpPost("login-user")]
         public async Task<ActionResult> Login(UserLogin userLogin)
         {
@@ -75,10 +82,57 @@ namespace NSE.Identity.API.Controllers
             return CustomReponse();
         }
 
+        #endregion
+
+        #region .: TOKEN :.
+
         private async Task<UserResponseLogin> GenerateJwt(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
             var claims = await _userManager.GetClaimsAsync(user);
+
+            //Get User Claims
+            ClaimsIdentity identityClaims = await GetUserClaims(user, claims);
+            //Create User Token
+            string encodedToken = CreateToken(identityClaims);
+
+            return GetResponseUserToken(user, claims, encodedToken); ;
+        }
+
+        private UserResponseLogin GetResponseUserToken(IdentityUser user, IList<Claim> claims, string encodedToken)
+        {
+            return new UserResponseLogin
+            {
+                AccessToken = encodedToken,
+                ExpiresIn = TimeSpan.FromHours(_appSettings.ExpireTime).TotalSeconds,
+                UserToken = new UserToken
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    Claims = claims.Select(me => new UserClaim { Type = me.Type, Value = me.Value })
+                }
+            };
+        }
+
+        private string CreateToken(ClaimsIdentity identityClaims)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var token = tokenHandler.CreateToken(new SecurityTokenDescriptor
+            {
+                Issuer = _appSettings.Issuer,
+                Audience = _appSettings.ValidAt,
+                Subject = identityClaims,
+                Expires = DateTime.UtcNow.AddHours(_appSettings.ExpireTime),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            });
+
+            var encodedToken = tokenHandler.WriteToken(token);
+            return encodedToken;
+        }
+
+        private async Task<ClaimsIdentity> GetUserClaims(IdentityUser user, IList<Claim> claims)
+        {
             var userRoles = await _userManager.GetRolesAsync(user);
 
             claims.Add(new Claim(JwtRegisteredClaimNames.Sub, user.Id));
@@ -95,36 +149,12 @@ namespace NSE.Identity.API.Controllers
             var identityClaims = new ClaimsIdentity();
             identityClaims.AddClaims(claims);
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-
-            var token = tokenHandler.CreateToken(new SecurityTokenDescriptor
-            {
-                Issuer = _appSettings.Issuer,
-                Audience = _appSettings.ValidAt,
-                Subject = identityClaims,
-                Expires = DateTime.UtcNow.AddHours(_appSettings.ExpireTime),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            });
-
-            var encodedToken = tokenHandler.WriteToken(token);
-
-            var response = new UserResponseLogin
-            {
-                AccessToken = encodedToken,
-                ExpiresIn = TimeSpan.FromHours(_appSettings.ExpireTime).TotalSeconds,
-                UserToken = new UserToken
-                {
-                    Id = user.Id,
-                    Email = user.Email,
-                    Claims = claims.Select(me => new UserClaim { Type = me.Type, Value = me.Value })
-                }
-            };
-
-            return response;
+            return identityClaims;
         }
 
         private static long ToUnixEpochDate(DateTime date) =>
             (long)Math.Round((date.ToUniversalTime() - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds);
+
+        #endregion
     }
 }
