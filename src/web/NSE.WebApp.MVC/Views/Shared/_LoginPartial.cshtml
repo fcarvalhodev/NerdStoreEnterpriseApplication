@@ -1,11 +1,13 @@
 ﻿@using NSE.WebApp.MVC;
 @using Microsoft.Extensions.Localization;
+@inject NSE.WebApp.MVC.Extensions.IUser AppUser
 @inject IStringLocalizer<AuthenticationResources> SharedLocalizer
 
 <ul class="navbar-nav">
-    @if (Context.User.Identity.IsAuthenticated)
+    @if (AppUser.IsAuthenticated())
     {
         <li class="nav-item">
+            @*<a class="nav-link text-dark" title="Manage">@SharedLocalizer["Welcome"]  @AppUser.GetUserEmail()</a>*@
             <a class="nav-link text-dark" title="Manage">@SharedLocalizer["Welcome"]</a>
         </li>
         <li class="nav-item">
