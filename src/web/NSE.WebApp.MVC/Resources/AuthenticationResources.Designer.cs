@@ -70,6 +70,78 @@ namespace NSE.WebApp.MVC {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Você não tem permissão para fazer isto..
+        /// </summary>
+        public static string Error403Message {
+            get {
+                return ResourceManager.GetString("Error403Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Acesso Negado!.
+        /// </summary>
+        public static string Error403Title {
+            get {
+                return ResourceManager.GetString("Error403Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A página que está procurando não existe! &lt;br /&gt; Em caso de dúvidas entre em contato com o nosso suporte..
+        /// </summary>
+        public static string Error404Message {
+            get {
+                return ResourceManager.GetString("Error404Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ops, página não encontrada!.
+        /// </summary>
+        public static string Error404Title {
+            get {
+                return ResourceManager.GetString("Error404Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ocorreu um erro! Teste novamente mais tarde ou contate nosso suporte..
+        /// </summary>
+        public static string Error500Message {
+            get {
+                return ResourceManager.GetString("Error500Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ocorreu um erro!.
+        /// </summary>
+        public static string Error500Title {
+            get {
+                return ResourceManager.GetString("Error500Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ops! Algo deu errado :(.
+        /// </summary>
+        public static string ErrorMessage {
+            get {
+                return ResourceManager.GetString("ErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ooops! Ocorreu um erro, mas não se preocupe. Nosso time será avisado e iremos corrigir em breve!.
+        /// </summary>
+        public static string GenericServerError {
+            get {
+                return ResourceManager.GetString("GenericServerError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Entrar.
         /// </summary>
         public static string Login {

@@ -2,16 +2,14 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using NSE.WebApp.MVC.Models;
-using NSE.WebApp.MVC.Services;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace NSE.WebApp.MVC.Controllers
 {
-    public class AuthController : Controller
+    public class AuthController : MainController
     {
         private readonly NSE.WebApp.MVC.Services.IAuthenticationService _authenticationService;
 
@@ -33,43 +31,49 @@ namespace NSE.WebApp.MVC.Controllers
         {
             if (!ModelState.IsValid) return View(userRegister);
 
-            //Api - Registrar usuário
             var result = await _authenticationService.Register(userRegister);
+            if (ReponseHasErrors(result.ResponseResult)){
+                return View(userRegister);
+            }
 
             await RealizeLogin(result);
-
-            //Realizar o login na APP
-
             return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
         [Route("login")]
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
 
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login(UserLogin userLogin)
+        public async Task<IActionResult> Login(UserLogin userLogin, string returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             if (!ModelState.IsValid) return View(userLogin);
 
-            //Api - Registrar usuário
             var result = await _authenticationService.Login(userLogin);
-            await RealizeLogin(result);
-            
-            //Realizar o login na APP
+            if (ReponseHasErrors(result.ResponseResult))
+            {
+                return View(userLogin);
+            }
 
-            return RedirectToAction("Index", "Home");
+            await RealizeLogin(result);
+
+            if(string.IsNullOrEmpty(returnUrl)) return RedirectToAction("Index", "Home");
+
+            return LocalRedirect(returnUrl);
         }
 
         [HttpGet]
         [Route("logout")]
         public async Task<IActionResult> logout()
         {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
 
@@ -94,9 +98,6 @@ namespace NSE.WebApp.MVC.Controllers
                 new ClaimsPrincipal(claimsIdentity), authProperties);
         }
 
-        private static JwtSecurityToken GetTokenFormat(string jwtToken)
-        {
-            return new JwtSecurityTokenHandler().ReadToken(jwtToken) as JwtSecurityToken;
-        }
+    
     }
 }

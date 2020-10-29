@@ -1,21 +1,20 @@
-﻿@model NSE.WebApp.MVC.Models.UserRegister
+﻿@model NSE.WebApp.MVC.Models.UserLogin
 @using NSE.WebApp.MVC;
 @using Microsoft.Extensions.Localization;
 @inject IStringLocalizer<AuthenticationResources> SharedLocalizer
-
 
 @{
     ViewData["Title"] = "Registro";
 }
 
-
 <h1>@ViewData["Title"]</h1>
 <div class="row">
     <div class="col-md-12">
         <section>
-            <form method="post">
+            <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
                 <h4>Registre-se e comece a comprar hoje mesmo</h4>
                 <hr />
+                <vc:summary></vc:summary>
                 <div class="form-group">
                     <label asp-for="Email"></label>
                     <input asp-for="Email" class="form-control" />
@@ -26,17 +25,14 @@
                     <input asp-for="Password" class="form-control" type="password" />
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
-
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">@SharedLocalizer["Login"]</button>
                 </div>
-
                 <div class="form-group">
                     <p>
                         <a asp-action="Register" asp-controller="Auth">@SharedLocalizer["NewAccount"]</a>
                     </p>
                 </div>
-
             </form>
         </section>
     </div>

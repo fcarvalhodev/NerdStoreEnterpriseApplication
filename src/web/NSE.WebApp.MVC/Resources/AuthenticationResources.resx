@@ -120,6 +120,30 @@
   <data name="ConfirmPassword" xml:space="preserve">
     <value>Confirmar Senha</value>
   </data>
+  <data name="Error403Message" xml:space="preserve">
+    <value>Você não tem permissão para fazer isto.</value>
+  </data>
+  <data name="Error403Title" xml:space="preserve">
+    <value>Acesso Negado!</value>
+  </data>
+  <data name="Error404Message" xml:space="preserve">
+    <value>A página que está procurando não existe! &lt;br /&gt; Em caso de dúvidas entre em contato com o nosso suporte.</value>
+  </data>
+  <data name="Error404Title" xml:space="preserve">
+    <value>Ops, página não encontrada!</value>
+  </data>
+  <data name="Error500Message" xml:space="preserve">
+    <value>Ocorreu um erro! Teste novamente mais tarde ou contate nosso suporte.</value>
+  </data>
+  <data name="Error500Title" xml:space="preserve">
+    <value>Ocorreu um erro!</value>
+  </data>
+  <data name="ErrorMessage" xml:space="preserve">
+    <value>Ops! Algo deu errado :(</value>
+  </data>
+  <data name="GenericServerError" xml:space="preserve">
+    <value>Ooops! Ocorreu um erro, mas não se preocupe. Nosso time será avisado e iremos corrigir em breve!</value>
+  </data>
   <data name="Login" xml:space="preserve">
     <value>Entrar</value>
   </data>

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using NSE.WebApp.MVC.Extensions;
 using System.Collections.Generic;
 using System.Globalization;
 
@@ -38,15 +39,22 @@ namespace NSE.WebApp.MVC.Configuration
 
             app.UseRequestLocalization(localizationOption.Value);
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
-            }
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //}
+            //else
+            //{
+            //    app.UseExceptionHandler("/Error/500");
+            //    app.UseStatusCodePagesWithRedirects("/Error/{0}");
+            //    app.UseHsts();
+            //}
+
+            app.UseExceptionHandler("/Error/500");
+            app.UseStatusCodePagesWithRedirects("/Error/{0}");
+            app.UseHsts();
+
+
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();
@@ -54,6 +62,8 @@ namespace NSE.WebApp.MVC.Configuration
             app.UseRouting();
 
             app.UseIdentityConfiguration();
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
