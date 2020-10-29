@@ -66,7 +66,7 @@ namespace NSE.Identity.API.Controllers
         [HttpPost("login-user")]
         public async Task<ActionResult> Login(UserLogin userLogin)
         {
-            return new StatusCodeResult(500);
+            //return new StatusCodeResult(500);
 
             if (!ModelState.IsValid) return CustomReponse(ModelState);
 

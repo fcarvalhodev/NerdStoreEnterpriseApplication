@@ -1,7 +1,8 @@
-﻿using NSE.WebApp.MVC.Models;
+﻿using Microsoft.Extensions.Options;
+using NSE.WebApp.MVC.Extensions;
+using NSE.WebApp.MVC.Models;
+using System;
 using System.Net.Http;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace NSE.WebApp.MVC.Services
@@ -9,48 +10,49 @@ namespace NSE.WebApp.MVC.Services
     public class AuthenticationService : Service, IAuthenticationService
     {
         private readonly HttpClient _httpClient;
-        private JsonSerializerOptions options = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true,
-        };
 
-        public AuthenticationService(HttpClient httpClient)
+
+        public AuthenticationService(HttpClient httpClient,
+            IOptions<AppSettings> settings
+            )
         {
             _httpClient = httpClient;
+            httpClient.BaseAddress = new Uri(settings.Value.AuthenticationUrl);
         }
 
         public async Task<UserResponseLogin> Login(UserLogin userLogin)
         {
-            var loginContent = new StringContent(JsonSerializer.Serialize(userLogin), Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("http://localhost:63979/api/identity/login-user", loginContent);
-          
+            var loginContent = GetContent(userLogin);
+            var response = await _httpClient.PostAsync($"/api/identity/login-user", loginContent);
+
 
             if (!HandleErrorsResponse(response))
             {
+
                 return new UserResponseLogin
                 {
-                    ResponseResult = JsonSerializer.Deserialize<ResponseResult>(await response.Content.ReadAsStringAsync(), options)
+                    ResponseResult = await DeserializeObjectResponse<ResponseResult>(response)
                 };
             }
 
-            return JsonSerializer.Deserialize<UserResponseLogin>(await response.Content.ReadAsStringAsync(), options);
+            return await DeserializeObjectResponse<UserResponseLogin>(response);
         }
 
         public async Task<UserResponseLogin> Register(UserRegister userRegister)
         {
-            var loginContent = new StringContent(JsonSerializer.Serialize(userRegister), Encoding.UTF8, "application/json");
+            var registerContent = GetContent(userRegister);
 
-            var response = await _httpClient.PostAsync("http://localhost:63979/api/identity/new-user", loginContent);
+            var response = await _httpClient.PostAsync($"/api/identity/new-user", registerContent);
 
             if (!HandleErrorsResponse(response))
             {
                 return new UserResponseLogin
                 {
-                    ResponseResult = JsonSerializer.Deserialize<ResponseResult>(await response.Content.ReadAsStringAsync(), options)
+                    ResponseResult = await DeserializeObjectResponse<ResponseResult>(response)
                 };
             }
 
-            return JsonSerializer.Deserialize<UserResponseLogin>(await response.Content.ReadAsStringAsync(), options);
+            return await DeserializeObjectResponse<UserResponseLogin>(response);
         }
     }
 
