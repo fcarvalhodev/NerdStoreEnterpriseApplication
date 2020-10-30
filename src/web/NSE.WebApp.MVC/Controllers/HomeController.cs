@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
 using NSE.WebApp.MVC.Models;
-using System;
 
 namespace NSE.WebApp.MVC.Controllers
 {
@@ -9,10 +8,16 @@ namespace NSE.WebApp.MVC.Controllers
     {
         private readonly IHtmlLocalizer<AuthenticationResources> _localizer;
 
+        #region .: Constructor :.
+
         public HomeController(IHtmlLocalizer<AuthenticationResources> localizer)
         {
             _localizer = localizer;
         }
+
+        #endregion
+
+        #region .: Login :.
 
         public IActionResult Index()
         {
@@ -23,6 +28,10 @@ namespace NSE.WebApp.MVC.Controllers
         {
             return View();
         }
+
+        #endregion
+
+        #region .: Error :.
 
         [Route("error/{id:length(3,3)}")]
         public IActionResult Error(int id)
@@ -49,5 +58,7 @@ namespace NSE.WebApp.MVC.Controllers
             modelError.ErrorCode = id;
             modelError.Title = title.Value;
         }
+
+        #endregion
     }
 }

@@ -7,6 +7,8 @@ namespace NSE.WebApp.MVC.Controllers
 {
     public class MainController : Controller
     {
+        #region .: Error :.
+
         protected bool ReponseHasErrors(ResponseResult result)
         {
             if (result != null && result.Errors.Messages.Any())
@@ -23,9 +25,15 @@ namespace NSE.WebApp.MVC.Controllers
             return false;
         }
 
+        #endregion
+
+        #region .: Token :.
+
         protected JwtSecurityToken GetTokenFormat(string jwtToken)
         {
             return new JwtSecurityTokenHandler().ReadToken(jwtToken) as JwtSecurityToken;
         }
+
+        #endregion
     }
 }

@@ -18,6 +18,8 @@ namespace NSE.WebApp.MVC.Controllers
             _authenticationService = authenticationService;
         }
 
+        #region .: Register :.
+
         [HttpGet]
         [Route("new-account")]
         public IActionResult Register()
@@ -39,6 +41,10 @@ namespace NSE.WebApp.MVC.Controllers
             await RealizeLogin(result);
             return RedirectToAction("Index", "Home");
         }
+
+        #endregion
+
+        #region .: Login :.
 
         [HttpGet]
         [Route("login")]
@@ -69,14 +75,6 @@ namespace NSE.WebApp.MVC.Controllers
             return LocalRedirect(returnUrl);
         }
 
-        [HttpGet]
-        [Route("logout")]
-        public async Task<IActionResult> logout()
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
-        }
-
         private async Task RealizeLogin(UserResponseLogin userResponseLogin)
         {
             var token = GetTokenFormat(userResponseLogin.AccessToken);
@@ -94,10 +92,25 @@ namespace NSE.WebApp.MVC.Controllers
             };
 
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, 
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity), authProperties);
         }
 
-    
+
+        #endregion
+
+        #region .: Logout :.
+
+
+        [HttpGet]
+        [Route("logout")]
+        public async Task<IActionResult> logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home");
+        }
+
+        #endregion
+        
     }
 }
