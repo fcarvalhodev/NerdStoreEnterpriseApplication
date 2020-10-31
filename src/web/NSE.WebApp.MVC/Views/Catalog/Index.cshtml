@@ -19,21 +19,21 @@
                     {
                         <div class="col-md-3">
                             <div href="#" class="card card-product-grid">
-                                <a asp-controller="Catalogo" asp-action="ProdutoDetalhe" asp-route-id="@product.Id" class="img-wrap">
+                                <a asp-controller="Catalog" asp-action="ProductDetail" asp-route-id="@product.Id" class="img-wrap">
                                     <img src="~/images/produtos/@product.Image" alt="@product.Name">
                                 </a>
                                 <figcaption class="info-wrap">
-                                    <a asp-controller="Catalogo" asp-action="ProdutoDetalhe" asp-route-id="@product.Id" class="title">
+                                    <a asp-controller="Catalog" asp-action="ProductDetail" asp-route-id="@product.Id" class="title">
                                         <b> @product.Name</b>
                                     </a>
 
                                     <small class="card-text">
-                                        @this.MensagemEstoque(product.QuantityInStock)<br /><br />
+                                        @this.StockMessage(product.QuantityInStock)<br /><br />
                                         @product.Description
                                     </small>
                                 </figcaption>
                                 <div class="card-footer price mt-1">
-                                    <h3>@this.FormatoMoeda(product.Value)</h3>
+                                    <h3>@this.CoinFormat(product.Value)</h3>
                                 </div>
                             </div>
                         </div>

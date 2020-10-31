@@ -19,13 +19,13 @@ namespace NSE.WebApp.MVC.Services
             )
         {
             _httpClient = httpClient;
-            httpClient.BaseAddress = new Uri(settings.Value.AuthenticationUrl);
+            httpClient.BaseAddress = new Uri(settings.Value.CatalogUrl);
         }
 
 
         public async Task<ProductViewModel> GetProductById(Guid id)
         {
-            var response = await _httpClient.GetAsync($"/catalog/products/{id}");
+            var response = await _httpClient.GetAsync($"api/catalog/product/{id}");
             HandleErrorsResponse(response);
 
             return await DeserializeObjectResponse<ProductViewModel>(response);
@@ -33,7 +33,7 @@ namespace NSE.WebApp.MVC.Services
 
         public async Task<IEnumerable<ProductViewModel>> GetAll()
         {
-            var response = await _httpClient.GetAsync("/catalog/products");
+            var response = await _httpClient.GetAsync("api/catalog/products");
             HandleErrorsResponse(response);
 
             return await DeserializeObjectResponse<IEnumerable<ProductViewModel>>(response);

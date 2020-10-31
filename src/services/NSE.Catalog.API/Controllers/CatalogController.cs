@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NSE.Catalog.API.Models;
+using NSE.WebAPI.Core.Identity;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,13 +19,15 @@ namespace NSE.Catalog.API.Controllers
             _productRepository = productRepository;
         }
 
-        [HttpGet("catalog/products")]
+        [AllowAnonymous]
+        [HttpGet("products")]
         public async Task<IEnumerable<Product>> Index()
         {
             return await _productRepository.GetAll();
         }
 
-        [HttpGet("catalog/products/{id}")]
+        [ClaimsAuthorize("Catalog", "Read")]
+        [HttpGet("product/{id}")]
         public async Task<Product> GetProductDetail(Guid id)
         {
             return await _productRepository.GetById(id);

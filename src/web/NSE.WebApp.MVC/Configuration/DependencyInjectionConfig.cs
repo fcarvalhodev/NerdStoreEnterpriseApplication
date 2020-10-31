@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using NSE.WebApp.MVC.Extensions;
 using NSE.WebApp.MVC.Services;
+using NSE.WebApp.MVC.Services.Handlers;
 
 namespace NSE.WebApp.MVC.Configuration
 {
@@ -9,7 +10,12 @@ namespace NSE.WebApp.MVC.Configuration
     {
         public static void RegisterServices(this IServiceCollection services)
         {
+            services.AddTransient<HttpClientAuthorizationDelegatingHandler>(); //chamado uma instancia de cada vez por request.
+
             services.AddHttpClient<IAuthenticationService, AuthenticationService>();
+
+            services.AddHttpClient<ICatalogService, CatalogService>()
+                    .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
