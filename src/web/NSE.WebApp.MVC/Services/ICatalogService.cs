@@ -9,6 +9,14 @@ namespace NSE.WebApp.MVC.Services
     {
         Task<IEnumerable<ProductViewModel>> GetAll();
         Task<ProductViewModel> GetProductById(Guid id);
-       
     }
+
+    //public interface ICatalogServiceRefit
+    //{
+    //    [Get("api/products")]
+    //    Task<IEnumerable<ProductViewModel>> GetAll();
+
+    //    [Get("api/products/{id}")]
+    //    Task<ProductViewModel> GetById(Guid id);
+    //}
 }

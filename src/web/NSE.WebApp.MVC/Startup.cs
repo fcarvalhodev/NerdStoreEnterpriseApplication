@@ -33,7 +33,7 @@ namespace NSE.WebApp.MVC
 
             services.AddMvcConfiguration(Configuration);
 
-            services.RegisterServices();
+            services.RegisterServices(Configuration);
         }
 
         

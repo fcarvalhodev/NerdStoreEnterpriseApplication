@@ -6,18 +6,17 @@
     ViewData["Title"] = "Error";
 }
 
-@{
-    if (Model == null)
-    {
-        <div>
-            <h2>@SharedLocalizer["GenericServerError"]</h2>
-        </div>
-    }
-    else
-    {
-        ViewData["Title"] = Model.Title;
-        <div>
-            <h2>@Html.Raw(Model.Message)</h2>
-        </div>
-    }
-}
+<div class="container">
+    <div style="padding-top: 200px; text-align: center">
+        @{
+            if (Model == null)
+            {
+                <h2>@SharedLocalizer["GenericServerError"]</h2>
+            }
+            else
+            {
+                <h2>@Html.Raw(Model.Message)</h2>
+            }
+        }
+    </div>
+</div>
