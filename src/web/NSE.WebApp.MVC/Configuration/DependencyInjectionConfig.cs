@@ -34,7 +34,7 @@ namespace NSE.WebApp.MVC.Configuration
 
             services.AddHttpClient<ICatalogService, CatalogService>()
                   .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
-            //      .AddPolicyHandler(retryWaitPolicy);
+                  //.AddPolicyHandler(retryWaitPolicy);
 
             //services.AddHttpClient("Refit", options =>
             //{

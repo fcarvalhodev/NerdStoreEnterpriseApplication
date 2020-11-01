@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System;
 
-namespace NSE.Catalog.API.Configuration
+namespace NSE.Customer.API.Configuration
 {
     public static class SwaggerConfig
     {
@@ -14,7 +14,7 @@ namespace NSE.Catalog.API.Configuration
             {
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "NerdStore Enterprise Catalog API",
+                    Title = "NerdStore Enterprise Customer API",
                     Description = "This is an API for academic proposed, the idea is to understand the application of a enterprise solution",
                     Contact = new OpenApiContact() { Name = "Fábio Carvalho", Email = "fabio.carvalllho@live.com" },
                     License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT") }
